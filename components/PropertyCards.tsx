@@ -5,6 +5,7 @@ import Image from "next/image"
 import { EnvironmentOutlined, ExpandAltOutlined, HomeOutlined, UserOutlined } from "@ant-design/icons"
 import { PropertyWithImages } from '@/db'
 import Link from 'next/link'
+import SaveProperty from './SaveProperty'
 
 
 
@@ -21,6 +22,7 @@ export default function PropertyCards({
       {layout === "vertical" ? (<Row gutter={[16, 16]} wrap>
         {properties.map((property) => (
           <Col key={property.id} xs={24} md={8}>
+            <SaveProperty property={property}/>
             <Card hoverable className='p-0 mb-1 pointer'>
               <Carousel arrows style={{ height: "200px" }}>
                 {property.images?.length > 0 ? (
@@ -46,7 +48,11 @@ export default function PropertyCards({
                 )}
               </Carousel>
               <div className='p-1'>
+                <Link href={`properties/${property.id}`} style={{
+                  color:"black"
+                }}>
                 <PropertyContent property={property}></PropertyContent>
+                </Link>
               </div>
             </Card>
           </Col>
@@ -59,6 +65,7 @@ export default function PropertyCards({
           <Card key={property.id} hoverable className='p-0 mb-1 pointer'>
             <Row gutter={[16, 16]} wrap>
               <Col key={property.id} xs={24} md={8}>
+               <SaveProperty property={property}/>
                 <Carousel arrows style={{ height: "200px" }}>
                   {property.images?.length > 0 ? (
                     property.images.map((image) => (
@@ -106,11 +113,14 @@ function PropertyContent({ property }: {
           For {property.type.toUpperCase()}
         </p>
         <p className='card-header-price'>
-          ${property.price.toLocaleString()}
+          ${property.price.toLocaleString()}{property.type === "RENT" && "/month"}
         </p>
       </div>
       <Tag icon={<HomeOutlined />} color="blue">
         {property.bhk}
+      </Tag>&nbsp;
+      <Tag icon={<HomeOutlined />} color="blue">
+        {property.propertyType}
       </Tag>&nbsp;
       <Tag icon={<ExpandAltOutlined />} color="blue">
         {property.area}sqft
